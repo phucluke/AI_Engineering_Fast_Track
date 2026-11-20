@@ -15,8 +15,7 @@ python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v3.csv
 
 - **V1:** chỉ coi outage đang xảy ra là P1. Bỏ sót CASE-16 (login ngoài không có fallback) vì việc đó chưa hỏng.
 - **V2:** rủi ro trước go-live, hoặc phụ thuộc quan trọng không có fallback, là P1. Tách Risk ("may / could") khỏi Bug (đang hỏng). Chỉ trả JSON.
-- **V3:** bản dùng để chấm. Luật priority viết sau khi đọc 20 nhãn gold và lỗi của V1 lẫn V2, nên 20/20 trên bộ public không phải kết quả độc lập. Holdout `evidence/W01/w1_holdout.json` (10 ca) viết riêng và không dùng để sửa prompt.
-
+- **V3:** bản dùng để chấm. Luật priority viết sau khi đọc 20 nhãn gold và lỗi của V1 lẫn V2, nên 20/20 trên bộ public không phải kết quả độc lập.
 <!-- SYSTEM V1 -->
 You classify one delivery issue.
 

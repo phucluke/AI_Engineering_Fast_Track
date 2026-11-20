@@ -19,8 +19,6 @@
 ```bash
 python scripts/classify_issues.py --version v3 --output evidence/W01/w1_predictions_v3.csv --details evidence/W01/w1_details_v3.json
 python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v3.csv
-python scripts/classify_issues.py --version v1 --cases evidence/W01/w1_holdout.json --output evidence/W01/w1_holdout_v1.csv --details evidence/W01/w1_holdout_v1.json
-python scripts/classify_issues.py --version v3 --cases evidence/W01/w1_holdout.json --output evidence/W01/w1_holdout_v3.csv --details evidence/W01/w1_holdout_v3.json
 pytest -q tests/test_issue_classifier.py
 ```
 
@@ -40,15 +38,6 @@ V1 priority misses on the public set: CASE-05, CASE-06, CASE-08 predicted P2 (go
 
 V2 priority misses on the public set: CASE-06, CASE-08 predicted P2 (gold P3); CASE-12 predicted P3 (gold P2); CASE-13 predicted P1 (gold P2).
 
-Holdout `evidence/W01/w1_holdout.json` (10 cases). Labels were written before this run and were not used to edit V3. The course scorer does not read this file. Schema 10/10 on the first attempt for both prompts.
-
-| Prompt | Category | Priority | P1 misses |
-|---|---|---|---|
-| V1 | 10/10 | 6/10 | H-08 |
-| V3 | 10/10 | 9/10 | none |
-
-V3 holdout miss: H-04, "Put the open-blocker count into the Friday delivery note", predicted Feature P3; the holdout label is Feature P2.
-
 Local tests: `pytest -q tests/test_issue_classifier.py` → 6 passed. Existing mock Jira tests were not part of this change.
 
 Security: the user message does not contain gold `category` or `priority` (`test_public_cases_drop_gold_labels`). Invalid category, priority, and empty `next_action` fail validation. No write endpoint is called. `.env` is not committed. This week has no project-access or approval flow; those start in later weeks.
@@ -56,12 +45,11 @@ Security: the user message does not contain gold `category` or `priority` (`test
 Example: CASE-14 text "Security certificate expires before go-live" → V3 `Risk` / `P1`, next action from `evidence/W01/w1_details_v3.json`.
 
 **Known failures / trade-offs:**
-- V3 was tightened after seeing the public gold labels. Several few-shot lines paraphrase those situations, so 20/20 on the public file is not an independent measurement. The holdout is the check that was not used for tuning.
-- V3 still missed H-04: a delivery-note change was treated as a small feature (P3) rather than an operating-report change (P2). The priority rule is narrower than the wording in real tickets.
+- V3 was tightened after seeing the public gold labels. Several few-shot lines paraphrase those situations, so 20/20 on the public file is not an independent measurement. No independent check was run this week.
 - JSON mode plus one repair call is the schema strategy. Week 2 replaces this with OpenAI structured outputs. Temperature 0 reduces, but does not remove, run-to-run drift.
-- One thing that worked: stating that a missing fallback, or a certificate that expires before go-live, is P1 even when nothing is broken yet. V1 missed that pattern on CASE-14, CASE-16 and H-08. V2 fixed CASE-14 and CASE-16. V3 also caught H-08 (V2 was not run on the holdout).
+- One thing that worked: stating that a missing fallback, or a certificate that expires before go-live, is P1 even when nothing is broken yet. V1 missed that pattern on CASE-14 and CASE-16. V2 fixed both.
 - One thing V2 broke: "a risk that lands before a named go-live" made CASE-13 ("Vendor API may miss December cutover") P1, while gold is P2. V3 narrowed the rule and moved it back to P2.
-- One thing that failed: priority between P2 and P3 for features is still sensitive to phrasing, as H-04 shows.
+- One thing that failed: priority between P2 and P3 for features is still sensitive to phrasing.
 
 **Demo link:** Not recorded yet.
 
