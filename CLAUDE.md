@@ -19,7 +19,7 @@ pytest -q tests/test_mock_jira.py                 # expects 3 passed
 pytest -q tests/test_mock_jira.py::<test_name>    # single test
 uvicorn app.mock_jira:app --reload --port 8001    # docs at /docs
 docker compose up -d db                           # pgvector (pg16) on 127.0.0.1:5432, for W3+
-python scripts/evaluate_issue_classifier.py evidence/w1_predictions.csv
+python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v3.csv
 ```
 
 CSV header for the classifier scorer: `issue_id,predicted_category,predicted_priority`. `.env.example` lists `OPENAI_API_KEY`, `OPENAI_MODEL`, `DATABASE_URL`; copy to `.env` (never commit). There is no linter or build config. `pytest.ini` sets `pythonpath = .` so tests import `app.*`.

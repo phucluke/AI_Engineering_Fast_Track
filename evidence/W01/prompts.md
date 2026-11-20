@@ -4,8 +4,11 @@ Mỗi phiên bản là một khối system trong file này. User message chỉ c
 
 ```bash
 python scripts/classify_issues.py --version v1 --output evidence/W01/w1_predictions_v1.csv --details evidence/W01/w1_details_v1.json
-python scripts/classify_issues.py --version v3 --output evidence/W01/w1_predictions.csv --details evidence/W01/w1_details.json
-python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions.csv
+python scripts/classify_issues.py --version v2 --output evidence/W01/w1_predictions_v2.csv --details evidence/W01/w1_details_v2.json
+python scripts/classify_issues.py --version v3 --output evidence/W01/w1_predictions_v3.csv --details evidence/W01/w1_details_v3.json
+python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v1.csv
+python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v2.csv
+python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v3.csv
 ```
 
 ## Thay đổi

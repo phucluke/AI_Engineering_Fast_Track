@@ -13,31 +13,31 @@
     "issue_id": "CASE-02",
     "predicted_category": "Bug",
     "predicted_priority": "P1",
-    "next_action": "Open a production incident and restore global payment processing.",
+    "next_action": "Open a production incident and restore payment processing.",
     "prompt_version": "v3",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident and restore global payment processing.\"}"
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident and restore payment processing.\"}"
   },
   {
     "issue_id": "CASE-03",
     "predicted_category": "Bug",
     "predicted_priority": "P1",
-    "next_action": "Open a production incident and investigate the 500 error for data export.",
+    "next_action": "Open a production incident and restore data export functionality.",
     "prompt_version": "v3",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident and investigate the 500 error for data export.\"}"
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident and restore data export functionality.\"}"
   },
   {
     "issue_id": "CASE-04",
     "predicted_category": "Bug",
     "predicted_priority": "P1",
-    "next_action": "Open a production incident to resolve the SSO login issue.",
+    "next_action": "Open a production incident to resolve the SSO login block.",
     "prompt_version": "v3",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident to resolve the SSO login issue.\"}"
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident to resolve the SSO login block.\"}"
   },
   {
     "issue_id": "CASE-05",
@@ -113,11 +113,11 @@
     "issue_id": "CASE-12",
     "predicted_category": "Question",
     "predicted_priority": "P2",
-    "next_action": "Confirm the approver for incident reports and provide the information.",
+    "next_action": "Confirm the approver for the incident report and provide the information.",
     "prompt_version": "v3",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Question\",\"priority\":\"P2\",\"next_action\":\"Confirm the approver for incident reports and provide the information.\"}"
+    "raw": "{\"category\":\"Question\",\"priority\":\"P2\",\"next_action\":\"Confirm the approver for the incident report and provide the information.\"}"
   },
   {
     "issue_id": "CASE-13",
@@ -143,11 +143,11 @@
     "issue_id": "CASE-15",
     "predicted_category": "Risk",
     "predicted_priority": "P2",
-    "next_action": "Identify additional reviewers to mitigate the risk of delay.",
+    "next_action": "Identify the reviewer and assess the potential impact on UAT sign-off.",
     "prompt_version": "v3",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Identify additional reviewers to mitigate the risk of delay.\"}"
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Identify the reviewer and assess the potential impact on UAT sign-off.\"}"
   },
   {
     "issue_id": "CASE-16",
@@ -183,20 +183,20 @@
     "issue_id": "CASE-19",
     "predicted_category": "Question",
     "predicted_priority": "P3",
-    "next_action": "Find the information about the staging cluster region and provide the answer.",
+    "next_action": "Find out the region of the staging cluster and provide the information.",
     "prompt_version": "v3",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Find the information about the staging cluster region and provide the answer.\"}"
+    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Find out the region of the staging cluster and provide the information.\"}"
   },
   {
     "issue_id": "CASE-20",
     "predicted_category": "Risk",
     "predicted_priority": "P2",
-    "next_action": "Identify the unreviewed dependencies and assess their impact on the release timeline.",
+    "next_action": "Identify the unreviewed dependencies and assess their impact on the release schedule.",
     "prompt_version": "v3",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Identify the unreviewed dependencies and assess their impact on the release timeline.\"}"
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Identify the unreviewed dependencies and assess their impact on the release schedule.\"}"
   }
 ]

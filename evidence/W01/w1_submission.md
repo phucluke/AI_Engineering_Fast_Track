@@ -17,8 +17,8 @@
 **How to run:**
 
 ```bash
-python scripts/classify_issues.py --version v3 --output evidence/W01/w1_predictions.csv --details evidence/W01/w1_details.json
-python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions.csv
+python scripts/classify_issues.py --version v3 --output evidence/W01/w1_predictions_v3.csv --details evidence/W01/w1_details_v3.json
+python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v3.csv
 python scripts/classify_issues.py --version v1 --cases evidence/W01/w1_holdout.json --output evidence/W01/w1_holdout_v1.csv --details evidence/W01/w1_holdout_v1.json
 python scripts/classify_issues.py --version v3 --cases evidence/W01/w1_holdout.json --output evidence/W01/w1_holdout_v3.csv --details evidence/W01/w1_holdout_v3.json
 pytest -q tests/test_issue_classifier.py
@@ -50,7 +50,7 @@ Local tests: `pytest -q tests/test_issue_classifier.py` → 6 passed. Existing m
 
 Security: the user message does not contain gold `category` or `priority` (`test_public_cases_drop_gold_labels`). Invalid category, priority, and empty `next_action` fail validation. No write endpoint is called. `.env` is not committed. This week has no project-access or approval flow; those start in later weeks.
 
-Example: CASE-14 text "Security certificate expires before go-live" → V3 `Risk` / `P1`, next action from `evidence/W01/w1_details.json`.
+Example: CASE-14 text "Security certificate expires before go-live" → V3 `Risk` / `P1`, next action from `evidence/W01/w1_details_v3.json`.
 
 **Known failures / trade-offs:**
 - V3 was tightened after seeing the public gold labels. Several few-shot lines paraphrase those situations, so 20/20 on the public file is not an independent measurement. The holdout is the check that was not used for tuning.

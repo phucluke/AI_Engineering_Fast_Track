@@ -1,5 +1,5 @@
 """Score a member-generated CSV without exposing a completed AI solution.
-Usage: python scripts/evaluate_issue_classifier.py evidence/w1_predictions.csv
+Usage: python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v3.csv
 Header: issue_id,predicted_category,predicted_priority
 """
 from pathlib import Path

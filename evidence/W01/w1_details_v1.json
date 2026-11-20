@@ -53,11 +53,11 @@
     "issue_id": "CASE-06",
     "predicted_category": "Feature",
     "predicted_priority": "P2",
-    "next_action": "Create a design proposal for the dark theme implementation.",
+    "next_action": "Create a task to design and implement the dark theme for the PM dashboard.",
     "prompt_version": "v1",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Feature\",\"priority\":\"P2\",\"next_action\":\"Create a design proposal for the dark theme implementation.\"}"
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P2\",\"next_action\":\"Create a task to design and implement the dark theme for the PM dashboard.\"}"
   },
   {
     "issue_id": "CASE-07",
@@ -83,11 +83,11 @@
     "issue_id": "CASE-09",
     "predicted_category": "Question",
     "predicted_priority": "P3",
-    "next_action": "Provide the user with the UAT deadline information.",
+    "next_action": "Provide the user with the expected UAT deadline.",
     "prompt_version": "v1",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Provide the user with the UAT deadline information.\"}"
+    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Provide the user with the expected UAT deadline.\"}"
   },
   {
     "issue_id": "CASE-10",
@@ -132,12 +132,12 @@
   {
     "issue_id": "CASE-14",
     "predicted_category": "Risk",
-    "predicted_priority": "P1",
-    "next_action": "Renew the security certificate immediately to ensure it is valid before go-live.",
+    "predicted_priority": "P2",
+    "next_action": "Renew the security certificate before the go-live date.",
     "prompt_version": "v1",
     "model": "openai/gpt-4o-mini",
     "schema_attempts": 1,
-    "raw": "{\"category\":\"Risk\",\"priority\":\"P1\",\"next_action\":\"Renew the security certificate immediately to ensure it is valid before go-live.\"}"
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Renew the security certificate before the go-live date.\"}"
   },
   {
     "issue_id": "CASE-15",

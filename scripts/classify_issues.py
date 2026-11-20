@@ -2,7 +2,7 @@
 
 Usage:
   python scripts/classify_issues.py --version v3
-  python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions.csv
+  python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v3.csv
 
 Requires OPENROUTER_API_KEY and OPENROUTER_MODEL in .env. Sends issue text only.
 """
@@ -65,8 +65,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Classify issues with an OpenRouter model")
     parser.add_argument("--version", required=True, choices=["v1", "v2", "v3"])
     parser.add_argument("--cases", type=Path, default=ROOT / "data/evaluation/issue_classification_gold.json")
-    parser.add_argument("--output", type=Path, default=ROOT / "evidence" / "W01" / "w1_predictions.csv")
-    parser.add_argument("--details", type=Path, default=ROOT / "evidence" / "W01" / "w1_details.json")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--details", type=Path)
     parser.add_argument("--dry-run", action="store_true", help="Print the payload shape and do not call OpenRouter")
     args = parser.parse_args(argv)
     load_dotenv(ROOT / ".env")
@@ -100,8 +100,10 @@ def main(argv: list[str] | None = None) -> int:
             "raw": raw,
         })
         print(f"{case['issue_id']} {parsed.category} {parsed.priority}")
-    write_outputs(rows, args.output, args.details)
-    print(f"wrote {args.output} ({len(rows)} rows) and {args.details}")
+    output = args.output or ROOT / "evidence" / "W01" / f"w1_predictions_{args.version}.csv"
+    details = args.details or ROOT / "evidence" / "W01" / f"w1_details_{args.version}.json"
+    write_outputs(rows, output, details)
+    print(f"wrote {output} ({len(rows)} rows) and {details}")
     return 0
 
 if __name__ == "__main__":
