@@ -1,0 +1,102 @@
+[
+  {
+    "issue_id": "H-01",
+    "predicted_category": "Bug",
+    "predicted_priority": "P1",
+    "next_action": "Open a production incident and resolve the 504 errors during checkout.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident and resolve the 504 errors during checkout.\"}"
+  },
+  {
+    "issue_id": "H-02",
+    "predicted_category": "Bug",
+    "predicted_priority": "P2",
+    "next_action": "Reproduce the tooltip overlap issue and adjust the layout on the roadmap page.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P2\",\"next_action\":\"Reproduce the tooltip overlap issue and adjust the layout on the roadmap page.\"}"
+  },
+  {
+    "issue_id": "H-03",
+    "predicted_category": "Feature",
+    "predicted_priority": "P3",
+    "next_action": "Implement a keyboard shortcut for collapsing the left navigation.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P3\",\"next_action\":\"Implement a keyboard shortcut for collapsing the left navigation.\"}"
+  },
+  {
+    "issue_id": "H-04",
+    "predicted_category": "Feature",
+    "predicted_priority": "P3",
+    "next_action": "Add the open-blocker count to the Friday delivery note.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P3\",\"next_action\":\"Add the open-blocker count to the Friday delivery note.\"}"
+  },
+  {
+    "issue_id": "H-05",
+    "predicted_category": "Question",
+    "predicted_priority": "P3",
+    "next_action": "Find out the timezone used for the release calendar and provide the information.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Find out the timezone used for the release calendar and provide the information.\"}"
+  },
+  {
+    "issue_id": "H-06",
+    "predicted_category": "Question",
+    "predicted_priority": "P2",
+    "next_action": "Identify the approver for hotfixes after code freeze and provide the information.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Question\",\"priority\":\"P2\",\"next_action\":\"Identify the approver for hotfixes after code freeze and provide the information.\"}"
+  },
+  {
+    "issue_id": "H-07",
+    "predicted_category": "Risk",
+    "predicted_priority": "P1",
+    "next_action": "Renew the production signing certificate before the launch review.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P1\",\"next_action\":\"Renew the production signing certificate before the launch review.\"}"
+  },
+  {
+    "issue_id": "H-08",
+    "predicted_category": "Risk",
+    "predicted_priority": "P1",
+    "next_action": "Implement a backup channel for password resets before relying solely on the email provider.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P1\",\"next_action\":\"Implement a backup channel for password resets before relying solely on the email provider.\"}"
+  },
+  {
+    "issue_id": "H-09",
+    "predicted_category": "Risk",
+    "predicted_priority": "P2",
+    "next_action": "Confirm the contractor's timeline and assess the impact on the beta.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Confirm the contractor's timeline and assess the impact on the beta.\"}"
+  },
+  {
+    "issue_id": "H-10",
+    "predicted_category": "Feature",
+    "predicted_priority": "P3",
+    "next_action": "Request the design team to update the status chip colors from gray to blue.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P3\",\"next_action\":\"Request the design team to update the status chip colors from gray to blue.\"}"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "issue_id": "H-01",
+    "text": "Customer checkout has been returning 504 for every region since the last deploy",
+    "category": "Bug",
+    "priority": "P1"
+  },
+  {
+    "issue_id": "H-02",
+    "text": "The milestone tooltip overlaps the axis label on the roadmap page",
+    "category": "Bug",
+    "priority": "P2"
+  },
+  {
+    "issue_id": "H-03",
+    "text": "Add a keyboard shortcut to collapse the left navigation",
+    "category": "Feature",
+    "priority": "P3"
+  },
+  {
+    "issue_id": "H-04",
+    "text": "Put the open-blocker count into the Friday delivery note",
+    "category": "Feature",
+    "priority": "P2"
+  },
+  {
+    "issue_id": "H-05",
+    "text": "Which timezone is used for the release calendar?",
+    "category": "Question",
+    "priority": "P3"
+  },
+  {
+    "issue_id": "H-06",
+    "text": "Who has to approve a hotfix after code freeze?",
+    "category": "Question",
+    "priority": "P2"
+  },
+  {
+    "issue_id": "H-07",
+    "text": "The production signing certificate expires the night before the launch review",
+    "category": "Risk",
+    "priority": "P1"
+  },
+  {
+    "issue_id": "H-08",
+    "text": "Password reset stops completely if the email provider is down, and there is no backup channel",
+    "category": "Risk",
+    "priority": "P1"
+  },
+  {
+    "issue_id": "H-09",
+    "text": "The documentation contractor may not finish the admin guide before the beta",
+    "category": "Risk",
+    "priority": "P2"
+  },
+  {
+    "issue_id": "H-10",
+    "text": "Can we recolor the status chips from gray to blue?",
+    "category": "Feature",
+    "priority": "P3"
+  }
+]

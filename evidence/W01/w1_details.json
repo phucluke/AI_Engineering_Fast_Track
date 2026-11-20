@@ -1,0 +1,202 @@
+[
+  {
+    "issue_id": "CASE-01",
+    "predicted_category": "Bug",
+    "predicted_priority": "P1",
+    "next_action": "Open a production incident and restore the checkout API.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident and restore the checkout API.\"}"
+  },
+  {
+    "issue_id": "CASE-02",
+    "predicted_category": "Bug",
+    "predicted_priority": "P1",
+    "next_action": "Open a production incident and restore global payment processing.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident and restore global payment processing.\"}"
+  },
+  {
+    "issue_id": "CASE-03",
+    "predicted_category": "Bug",
+    "predicted_priority": "P1",
+    "next_action": "Open a production incident and investigate the 500 error for data export.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident and investigate the 500 error for data export.\"}"
+  },
+  {
+    "issue_id": "CASE-04",
+    "predicted_category": "Bug",
+    "predicted_priority": "P1",
+    "next_action": "Open a production incident to resolve the SSO login issue.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P1\",\"next_action\":\"Open a production incident to resolve the SSO login issue.\"}"
+  },
+  {
+    "issue_id": "CASE-05",
+    "predicted_category": "Feature",
+    "predicted_priority": "P3",
+    "next_action": "Schedule the addition of a download button to the sprint chart.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P3\",\"next_action\":\"Schedule the addition of a download button to the sprint chart.\"}"
+  },
+  {
+    "issue_id": "CASE-06",
+    "predicted_category": "Feature",
+    "predicted_priority": "P3",
+    "next_action": "Schedule the implementation of the dark theme for the PM dashboard.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P3\",\"next_action\":\"Schedule the implementation of the dark theme for the PM dashboard.\"}"
+  },
+  {
+    "issue_id": "CASE-07",
+    "predicted_category": "Feature",
+    "predicted_priority": "P2",
+    "next_action": "Implement the custom Jira field in the status report.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P2\",\"next_action\":\"Implement the custom Jira field in the status report.\"}"
+  },
+  {
+    "issue_id": "CASE-08",
+    "predicted_category": "Feature",
+    "predicted_priority": "P3",
+    "next_action": "Schedule the implementation of CSV export for reports.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P3\",\"next_action\":\"Schedule the implementation of CSV export for reports.\"}"
+  },
+  {
+    "issue_id": "CASE-09",
+    "predicted_category": "Question",
+    "predicted_priority": "P3",
+    "next_action": "Provide the expected UAT deadline.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Provide the expected UAT deadline.\"}"
+  },
+  {
+    "issue_id": "CASE-10",
+    "predicted_category": "Question",
+    "predicted_priority": "P3",
+    "next_action": "Check the current sprint board and report the number of issues.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Check the current sprint board and report the number of issues.\"}"
+  },
+  {
+    "issue_id": "CASE-11",
+    "predicted_category": "Question",
+    "predicted_priority": "P3",
+    "next_action": "Find the location of the weekly release notes and provide the information.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Find the location of the weekly release notes and provide the information.\"}"
+  },
+  {
+    "issue_id": "CASE-12",
+    "predicted_category": "Question",
+    "predicted_priority": "P2",
+    "next_action": "Confirm the approver for incident reports and provide the information.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Question\",\"priority\":\"P2\",\"next_action\":\"Confirm the approver for incident reports and provide the information.\"}"
+  },
+  {
+    "issue_id": "CASE-13",
+    "predicted_category": "Risk",
+    "predicted_priority": "P2",
+    "next_action": "Confirm the vendor API timeline and assess the impact on the December cutover.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Confirm the vendor API timeline and assess the impact on the December cutover.\"}"
+  },
+  {
+    "issue_id": "CASE-14",
+    "predicted_category": "Risk",
+    "predicted_priority": "P1",
+    "next_action": "Renew the security certificate before the go-live date.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P1\",\"next_action\":\"Renew the security certificate before the go-live date.\"}"
+  },
+  {
+    "issue_id": "CASE-15",
+    "predicted_category": "Risk",
+    "predicted_priority": "P2",
+    "next_action": "Identify additional reviewers to mitigate the risk of delay.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Identify additional reviewers to mitigate the risk of delay.\"}"
+  },
+  {
+    "issue_id": "CASE-16",
+    "predicted_category": "Risk",
+    "predicted_priority": "P1",
+    "next_action": "Implement a fallback authentication method before relying on external OAuth.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P1\",\"next_action\":\"Implement a fallback authentication method before relying on external OAuth.\"}"
+  },
+  {
+    "issue_id": "CASE-17",
+    "predicted_category": "Bug",
+    "predicted_priority": "P2",
+    "next_action": "Investigate the sort order issue on the issues page and implement a fix.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Bug\",\"priority\":\"P2\",\"next_action\":\"Investigate the sort order issue on the issues page and implement a fix.\"}"
+  },
+  {
+    "issue_id": "CASE-18",
+    "predicted_category": "Feature",
+    "predicted_priority": "P2",
+    "next_action": "Update the report frequency from weekly to daily.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Feature\",\"priority\":\"P2\",\"next_action\":\"Update the report frequency from weekly to daily.\"}"
+  },
+  {
+    "issue_id": "CASE-19",
+    "predicted_category": "Question",
+    "predicted_priority": "P3",
+    "next_action": "Find the information about the staging cluster region and provide the answer.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Question\",\"priority\":\"P3\",\"next_action\":\"Find the information about the staging cluster region and provide the answer.\"}"
+  },
+  {
+    "issue_id": "CASE-20",
+    "predicted_category": "Risk",
+    "predicted_priority": "P2",
+    "next_action": "Identify the unreviewed dependencies and assess their impact on the release timeline.",
+    "prompt_version": "v3",
+    "model": "openai/gpt-4o-mini",
+    "schema_attempts": 1,
+    "raw": "{\"category\":\"Risk\",\"priority\":\"P2\",\"next_action\":\"Identify the unreviewed dependencies and assess their impact on the release timeline.\"}"
+  }
+]
