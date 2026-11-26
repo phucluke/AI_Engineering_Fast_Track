@@ -1,6 +1,6 @@
 # Week 1 — prompts
 
-Mỗi phiên bản là một khối system trong file này. User message chỉ chứa nội dung phiếu, không có nhãn gold. Dùng cùng `OPENROUTER_MODEL` cho V1, V2 và V3.
+Mỗi phiên bản là một khối system trong file này. User message chỉ chứa nội dung phiếu, không có nhãn gold. Dùng cùng `OPENAI_MODEL` cho V1, V2 và V3.
 
 ```bash
 python scripts/classify_issues.py --version v1 --output evidence/W01/w1_predictions_v1.csv --details evidence/W01/w1_details_v1.json

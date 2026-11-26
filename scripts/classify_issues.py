@@ -1,10 +1,10 @@
-"""Classify the 20 public issues via OpenRouter and write the scorer CSV.
+"""Classify the 20 public issues via an OpenAI-compatible API and write the scorer CSV.
 
 Usage:
   python scripts/classify_issues.py --version v3
   python scripts/evaluate_issue_classifier.py evidence/W01/w1_predictions_v3.csv
 
-Requires OPENROUTER_API_KEY and OPENROUTER_MODEL in .env. Sends issue text only.
+Requires OPENAI_API_KEY and OPENAI_MODEL in .env. Sends issue text only.
 """
 from pathlib import Path
 import argparse, csv, json, sys
@@ -14,7 +14,7 @@ if str(ROOT) not in sys.path:
 from dotenv import load_dotenv
 from openai import APIStatusError, OpenAI
 from app.issue_classifier import (
-    build_messages, load_public_cases, load_system_prompt, parse_classification, resolve_openrouter,
+    build_messages, load_public_cases, load_system_prompt, parse_classification, resolve_openai,
 )
 
 def complete(client: OpenAI, model: str, messages: list[dict]) -> str:
@@ -27,7 +27,7 @@ def complete(client: OpenAI, model: str, messages: list[dict]) -> str:
         response = client.chat.completions.create(**kwargs)
     content = response.choices[0].message.content
     if not content:
-        raise RuntimeError("OpenRouter returned an empty message")
+        raise RuntimeError("LLM returned an empty message")
     return content
 
 def classify_one(client: OpenAI, model: str, system: str, issue_text: str):
@@ -62,12 +62,12 @@ def write_outputs(rows: list[dict], output: Path, details: Path):
     details.write_text(json.dumps(rows, indent=2), encoding="utf-8")
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Classify issues with an OpenRouter model")
+    parser = argparse.ArgumentParser(description="Classify issues with an OpenAI-compatible model")
     parser.add_argument("--version", required=True, choices=["v1", "v2", "v3"])
     parser.add_argument("--cases", type=Path, default=ROOT / "data/evaluation/issue_classification_gold.json")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--details", type=Path)
-    parser.add_argument("--dry-run", action="store_true", help="Print the payload shape and do not call OpenRouter")
+    parser.add_argument("--dry-run", action="store_true", help="Print the payload shape and do not call the LLM")
     args = parser.parse_args(argv)
     load_dotenv(ROOT / ".env")
     cases = load_public_cases(args.cases)
@@ -75,16 +75,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry_run:
         sample = build_messages(system, cases[0]["text"])
         print(f"prompt={args.version} cases={len(cases)} user_is_text_only={sample[1]['content']==cases[0]['text']}")
-        print("dry-run: no OpenRouter call")
+        print("dry-run: no OpenAI call")
         return 0
-    settings = resolve_openrouter()
+    settings = resolve_openai()
     client = OpenAI(api_key=settings["api_key"], base_url=settings["base_url"], default_headers=settings["default_headers"] or None)
     rows = []
     for case in cases:
         try:
             parsed, raw, attempts = classify_one(client, settings["model"], system, case["text"])
         except APIStatusError as exc:
-            print(f"OpenRouter error {exc.status_code}: {exc.message}", file=sys.stderr)
+            print(f"LLM error {exc.status_code}: {exc.message}", file=sys.stderr)
             return 1
         except ValueError as exc:
             print(f"schema failure {case['issue_id']}: {exc}", file=sys.stderr)

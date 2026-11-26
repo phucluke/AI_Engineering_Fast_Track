@@ -1,8 +1,9 @@
-"""Week 1 issue classifier. Calls OpenRouter; never sends gold labels."""
+"""Week 1 issue classifier. Calls an OpenAI-compatible API; never sends gold labels."""
 from pathlib import Path
 from typing import Literal
-import json, os, re
+import json, re
 from pydantic import BaseModel, Field, ValidationError
+from app.openai_settings import resolve_openai
 ROOT = Path(__file__).resolve().parents[1]
 GOLD = ROOT / "data/evaluation/issue_classification_gold.json"
 PROMPTS = ROOT / "evidence" / "W01" / "prompts.md"
@@ -53,22 +54,3 @@ def parse_classification(raw: str) -> IssueClassification:
         return IssueClassification.model_validate_json(text)
     except ValidationError as exc:
         raise ValueError(str(exc)) from exc
-
-def resolve_openrouter(env: dict | None = None) -> dict:
-    """OpenRouter is OpenAI-compatible. Only OPENROUTER_* is read."""
-    env = os.environ if env is None else env
-    key = str(env.get("OPENROUTER_API_KEY", "")).strip()
-    model = str(env.get("OPENROUTER_MODEL", "")).strip()
-    base = str(env.get("OPENROUTER_BASE_URL", "")).strip() or "https://openrouter.ai/api/v1"
-    if not key or key.startswith("replace"):
-        raise RuntimeError("Set OPENROUTER_API_KEY in .env. Do not commit .env.")
-    if not model:
-        raise RuntimeError("Set OPENROUTER_MODEL in .env, for example openai/gpt-4o-mini.")
-    headers = {}
-    referer = str(env.get("OPENROUTER_HTTP_REFERER", "")).strip()
-    title = str(env.get("OPENROUTER_APP_TITLE", "")).strip()
-    if referer:
-        headers["HTTP-Referer"] = referer
-    if title:
-        headers["X-Title"] = title
-    return {"api_key": key, "base_url": base, "model": model, "default_headers": headers}

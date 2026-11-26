@@ -3,7 +3,7 @@ import json
 import pytest
 from app.issue_classifier import (
     GOLD, PROMPTS, IssueClassification, build_messages, load_public_cases,
-    load_system_prompt, parse_classification, resolve_openrouter,
+    load_system_prompt, parse_classification, resolve_openai,
 )
 
 def test_public_cases_drop_gold_labels():
@@ -47,25 +47,30 @@ def test_three_prompt_versions_and_no_gold_text():
     for row in json.loads(GOLD.read_text(encoding="utf-8")):
         assert row["text"] not in blob
 
-def test_openrouter_settings_ignore_openai_key():
-    settings = resolve_openrouter({
-        "OPENROUTER_API_KEY": "sk-or-test",
-        "OPENROUTER_MODEL": "openai/gpt-4o-mini",
-        "OPENAI_API_KEY": "sk-should-not-be-used",
-        "OPENROUTER_APP_TITLE": "W1",
+def test_openai_settings_read_key_model_base_url():
+    settings = resolve_openai({
+        "OPENAI_API_KEY": "sk-test",
+        "OPENAI_MODEL": "openai/gpt-4o-mini",
+        "OPENAI_BASE_URL": "https://openrouter.ai/api/v1",
+        "OPENAI_APP_TITLE": "W1",
     })
-    assert settings["api_key"] == "sk-or-test"
+    assert settings["api_key"] == "sk-test"
     assert settings["base_url"] == "https://openrouter.ai/api/v1"
     assert settings["model"] == "openai/gpt-4o-mini"
     assert settings["default_headers"]["X-Title"] == "W1"
+    direct = resolve_openai({
+        "OPENAI_API_KEY": "sk-test",
+        "OPENAI_MODEL": "gpt-4o-mini",
+    })
+    assert direct["base_url"] == "https://api.openai.com/v1"
     with pytest.raises(RuntimeError):
-        resolve_openrouter({"OPENROUTER_API_KEY": "replace_at_runtime_never_commit", "OPENROUTER_MODEL": "m"})
+        resolve_openai({"OPENAI_API_KEY": "replace_at_runtime_never_commit", "OPENAI_MODEL": "m"})
     with pytest.raises(RuntimeError):
-        resolve_openrouter({"OPENROUTER_API_KEY": "sk-or-test", "OPENROUTER_MODEL": ""})
+        resolve_openai({"OPENAI_API_KEY": "sk-test", "OPENAI_MODEL": ""})
 
 def test_dry_run_makes_no_request(capsys):
     from scripts.classify_issues import main
     assert main(["--version", "v1", "--dry-run"]) == 0
     out = capsys.readouterr().out
     assert "cases=20" in out
-    assert "no OpenRouter call" in out
+    assert "no OpenAI call" in out
