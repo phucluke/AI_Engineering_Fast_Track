@@ -1,7 +1,9 @@
 """Meeting-notes extraction via OpenAI-compatible API (OpenAI or OpenRouter)."""
 from pathlib import Path
 import logging, time
-from openai import APIStatusError, APITimeoutError, OpenAI, RateLimitError
+from openai import (
+    APIStatusError, APITimeoutError, InternalServerError, OpenAI, RateLimitError,
+)
 from pydantic import ValidationError
 from app.openai_settings import resolve_openai
 from app.schemas import AnalyzeMeetingResponse
@@ -17,7 +19,10 @@ class UpstreamRateLimitError(Exception):
     """Upstream LLM returned 429 after retries."""
 
 class UpstreamServerError(Exception):
-    """Upstream LLM returned a 5xx after retries."""
+    """Upstream LLM returned HTTP 500 (or other 5xx except 503) after retries."""
+
+class UpstreamUnavailableError(Exception):
+    """Upstream LLM returned HTTP 503 (model overloaded) after retries."""
 
 class InvalidModelOutputError(Exception):
     """Model reply could not be validated against the response schema."""
@@ -88,6 +93,16 @@ class LLMService:
                     time.sleep(wait)
                     continue
                 raise UpstreamRateLimitError("upstream rate limited") from exc
+            except InternalServerError as exc:
+                last_exc = exc
+                wait = _retry_after_seconds(exc, attempt)
+                log.warning("LLM %s attempt=%s wait=%.1fs", exc.status_code, attempt + 1, wait)
+                if attempt < self.max_retries:
+                    time.sleep(wait)
+                    continue
+                if exc.status_code == 503:
+                    raise UpstreamUnavailableError("upstream model overloaded") from exc
+                raise UpstreamServerError("upstream server error") from exc
             except APIStatusError as exc:
                 last_exc = exc
                 if exc.status_code == 429:
@@ -98,10 +113,13 @@ class LLMService:
                         continue
                     raise UpstreamRateLimitError("upstream rate limited") from exc
                 if exc.status_code >= 500:
-                    log.warning("LLM %s attempt=%s", exc.status_code, attempt + 1)
+                    wait = _retry_after_seconds(exc, attempt)
+                    log.warning("LLM %s attempt=%s wait=%.1fs", exc.status_code, attempt + 1, wait)
                     if attempt < self.max_retries:
-                        time.sleep(min(2 ** attempt, 8))
+                        time.sleep(wait)
                         continue
+                    if exc.status_code == 503:
+                        raise UpstreamUnavailableError("upstream model overloaded") from exc
                     raise UpstreamServerError("upstream server error") from exc
                 raise
             if attempt < self.max_retries:

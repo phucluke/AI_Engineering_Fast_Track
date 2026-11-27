@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
-from openai import APIStatusError, APITimeoutError
+from openai import APIStatusError, APITimeoutError, InternalServerError, RateLimitError
 from app.main import app, get_llm_service
 from app.schemas import AnalyzeMeetingResponse, MeetingAction
 from app.services.llm import LLMService, InvalidModelOutputError
@@ -19,6 +19,12 @@ class FakeHTTPResponse:
 
 def _status_error(code: int, message: str = "upstream") -> APIStatusError:
     return APIStatusError(message, response=FakeHTTPResponse(code), body={"error": message})
+
+def _rate_limit_error(message: str = "slow down") -> RateLimitError:
+    return RateLimitError(message, response=FakeHTTPResponse(429), body={"error": message})
+
+def _internal_server_error(code: int, message: str = "boom") -> InternalServerError:
+    return InternalServerError(message, response=FakeHTTPResponse(code), body={"error": message})
 
 @pytest.fixture
 def client():
@@ -41,7 +47,7 @@ def test_timeout_returns_504(client):
     assert r.status_code == 504
     assert "timeout" in r.json()["detail"]
 
-def test_rate_limit_returns_503(client):
+def test_rate_limit_returns_429(client):
     class Boom(LLMService):
         def __init__(self):
             pass
@@ -50,8 +56,20 @@ def test_rate_limit_returns_503(client):
             raise UpstreamRateLimitError("upstream rate limited")
     app.dependency_overrides[get_llm_service] = lambda: Boom()
     r = client.post("/analyze-meeting", json={"meeting_text": "Meeting Date: 2026-11-23\nNo actions."})
-    assert r.status_code == 503
+    assert r.status_code == 429
     assert "rate" in r.json()["detail"]
+
+def test_upstream_503_returns_503(client):
+    class Boom(LLMService):
+        def __init__(self):
+            pass
+        def analyze_meeting(self, meeting_text: str):
+            from app.services.llm import UpstreamUnavailableError
+            raise UpstreamUnavailableError("upstream model overloaded")
+    app.dependency_overrides[get_llm_service] = lambda: Boom()
+    r = client.post("/analyze-meeting", json={"meeting_text": "Meeting Date: 2026-11-23\nNo actions."})
+    assert r.status_code == 503
+    assert "overloaded" in r.json()["detail"]
 
 def test_upstream_500_returns_502(client):
     class Boom(LLMService):
@@ -113,7 +131,20 @@ def test_llm_maps_timeout_after_retries(monkeypatch):
         svc.analyze_meeting("notes")
     assert calls["n"] == 2
 
-def test_llm_maps_429_and_500(monkeypatch):
+def test_llm_maps_rate_limit_error(monkeypatch):
+    monkeypatch.setattr("app.services.llm.time.sleep", lambda *_: None)
+    class RateClient:
+        def __init__(self):
+            self.chat = self
+            self.completions = self
+        def parse(self, **kwargs):
+            raise _rate_limit_error()
+    from app.services.llm import UpstreamRateLimitError
+    svc = LLMService(client=RateClient(), model="m", max_retries=0, system_prompt="x")
+    with pytest.raises(UpstreamRateLimitError):
+        svc.analyze_meeting("notes")
+
+def test_llm_maps_429_api_status_fallback(monkeypatch):
     monkeypatch.setattr("app.services.llm.time.sleep", lambda *_: None)
     class RateClient:
         def __init__(self):
@@ -121,19 +152,32 @@ def test_llm_maps_429_and_500(monkeypatch):
             self.completions = self
         def parse(self, **kwargs):
             raise _status_error(429, "slow down")
-    from app.services.llm import UpstreamRateLimitError, UpstreamServerError
+    from app.services.llm import UpstreamRateLimitError
     svc = LLMService(client=RateClient(), model="m", max_retries=0, system_prompt="x")
     with pytest.raises(UpstreamRateLimitError):
         svc.analyze_meeting("notes")
+
+def test_llm_maps_internal_server_errors(monkeypatch):
+    monkeypatch.setattr("app.services.llm.time.sleep", lambda *_: None)
+    from app.services.llm import UpstreamServerError, UpstreamUnavailableError
+    class OverloadedClient:
+        def __init__(self):
+            self.chat = self
+            self.completions = self
+        def parse(self, **kwargs):
+            raise _internal_server_error(503, "server_is_overloaded")
+    svc503 = LLMService(client=OverloadedClient(), model="m", max_retries=0, system_prompt="x")
+    with pytest.raises(UpstreamUnavailableError):
+        svc503.analyze_meeting("notes")
     class ServerClient:
         def __init__(self):
             self.chat = self
             self.completions = self
         def parse(self, **kwargs):
-            raise _status_error(500, "boom")
-    svc2 = LLMService(client=ServerClient(), model="m", max_retries=0, system_prompt="x")
+            raise _internal_server_error(500, "boom")
+    svc500 = LLMService(client=ServerClient(), model="m", max_retries=0, system_prompt="x")
     with pytest.raises(UpstreamServerError):
-        svc2.analyze_meeting("notes")
+        svc500.analyze_meeting("notes")
 
 def test_llm_invalid_parse_raises(monkeypatch):
     class BadClient:

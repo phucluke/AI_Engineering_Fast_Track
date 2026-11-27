@@ -1,21 +1,24 @@
 # Weekly Submission – W2 / Phuc Nguyen
 
-**Feature (F01–F04 or Foundation):** Foundation / Gate 1. Meeting Notes API only. No Jira calls.
+**Feature (F01–F04 or Foundation):** Foundation — **Gate 1**. Meeting Notes API (`POST /analyze-meeting`). Model calls via the OpenAI-compatible SDK; **no** Jira integration and **no** project-level authorization (W7).
+
 
 **What I studied (2–3 concepts):**
-- OpenAI-compatible structured outputs (`chat.completions.parse` + Pydantic) through OpenRouter.
-- Upstream failure handling: timeout, 429 with backoff/`Retry-After`, 5xx, and invalid model JSON mapped to stable HTTP statuses without leaking secrets.
-- Extraction rules for nullable `owner` / `due_date`, and treating proposals as non-decisions.
+
+- [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs): `chat.completions.parse` + a Pydantic response model (replaces W1 JSON mode + repair).
+- [Error codes / 429](https://developers.openai.com/api/docs/guides/error-codes): timeout → 504; rate limit → 429 with backoff; separate upstream failures from unparseable model output.
+- Extraction rules: nullable `owner` / `due_date`; ISO dates only when explicit in the notes; proposals / “maybe” must not become committed actions.
 
 **What I built (summary + key modules):**
-- `app/main.py` — FastAPI `POST /analyze-meeting` with OpenAPI docs.
-- `app/schemas.py` — request `meeting_text`; response `summary`, `decisions`, `actions`.
-- `app/services/llm.py` — OpenRouter client, structured output, retries, error mapping.
-- `app/openai_settings.py` — shared `OPENAI_*` resolution (api_key / base_url / model; OpenAI or OpenRouter).
-- `tests/test_meeting_api.py` — 5 required error paths + schema happy path (no network).
-- `scripts/evaluate_meeting_notes.py` — scores the public 20-case fixture.
+
+- `app/main.py` — FastAPI, `get_llm_service` dependency, `POST /analyze-meeting`.
+- `app/schemas.py` — `MeetingNotesRequest`, `MeetingAction`, `AnalyzeMeetingResponse`.
+- `app/services/llm.py` — OpenRouter/OpenAI client, structured parse, 429 retries, exceptions → HTTP.
+- `app/openai_settings.py` — `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_MODEL` (switch provider by editing `.env` only).
+- `tests/test_meeting_api.py` — 5 required error paths + happy-path schema (TC06 null dates) + LLM error-mapping units; **no network calls**.
+- `scripts/evaluate_meeting_notes.py` — schema + soft match on summary/decisions + exact `owner`/`due_date` on 20 cases.
 - `evidence/W02/system_prompt.md` — extraction system prompt v1.
-- Branch `w2-meeting-notes-api`. Current `.env` points OpenAI SDK at OpenRouter (`openai/gpt-4o-mini`).
+- Branch: `w2-meeting-notes-api`. Current model: `openai/gpt-4o-mini` via OpenRouter (`temperature=0`).
 
 **How to run:**
 
@@ -26,38 +29,82 @@ python scripts/evaluate_meeting_notes.py
 python scripts/smoke_test.py
 ```
 
-Requires `.env` with `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_BASE_URL`. Never commit `.env`.
+Requires `.env` (never commit): `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_BASE_URL`.
 
-Example request:
+**Example request / response (Gate 1 contract):**
+
+Request:
+
+```json
+{
+  "meeting_text": "Meeting Date: 2026-11-23\nAttendees: Phu, Hung, Minh\n\nThe team agreed to prioritize the login bug. Phu will fix the login authentication issue by November 25, 2026."
+}
+```
+
+Response (200, `AnalyzeMeetingResponse` schema):
+
+```json
+{
+  "summary": "…",
+  "decisions": ["agreed to prioritize the login bug"],
+  "actions": [
+    {
+      "owner": "Phu",
+      "action": "fix the login authentication issue",
+      "due_date": "2026-11-25"
+    }
+  ]
+}
+```
 
 ```bash
-curl -X POST http://127.0.0.1:8000/analyze-meeting -H "Content-Type: application/json" -d "{\"meeting_text\":\"Meeting Date: 2026-11-23\\nAttendees: Phu, Hung, Minh\\n\\nThe team agreed to prioritize the login bug. Phu will fix the login authentication issue by November 25, 2026.\"}"
+curl -X POST http://127.0.0.1:8000/analyze-meeting -H "Content-Type: application/json" -d "{\"meeting_text\":\"Meeting Date: 2026-11-23\\nAttendees: Phu\\n\\nPhu will fix login by November 25, 2026.\"}"
 ```
 
 **Results:**
 
-Public set `data/evaluation/week2_meeting_notes_expected_20_cases.json` (20 cases). Companion contract: `data/documents/week2_meeting_notes_expected_20_cases.md`.
+Gold set: `data/evaluation/week2_meeting_notes_expected_20_cases.json` (20 cases). Companion: `data/documents/week2_meeting_notes_expected_20_cases.md`.
 
-| Check | Result |
-|---|---|
-| Schema on successful calls | 20/20 = 100% |
-| Case pass (actions exact owner/due_date + soft decisions) | 20/20 = 100% |
+### Evaluation (20 public cases)
+
+| Metric | Result |
+|--------|--------|
+| Schema on successful LLM calls | 20/20 = 100% |
+| Case pass (actions: exact owner + `due_date`; decisions: soft match) | 20/20 = 100% |
 | Gate fact/action ≥ 85% | PASS |
-| Local API error tests | `pytest -q tests/test_meeting_api.py` → passed (invalid payload, timeout, 429, upstream 500, broken model output) |
 | Smoke | `python scripts/smoke_test.py` → PASS |
 
-Raw predictions and per-case scores: `evidence/W02/w2_meeting_results.json`.
+Raw scorer output: `evidence/W02/w2_meeting_results.json` (`prompt_version: v1`, `model: openai/gpt-4o-mini`).
 
-Security: API key only in `.env` (gitignored). `.env.example` uses placeholders. Error responses and logs do not echo the key. This week has no project-access filter.
+### API negative tests (5 required — `tests/test_meeting_api.py`)
+
+| Scenario | Test | HTTP |
+|----------|------|------|
+| Invalid payload | `test_invalid_payload_returns_422` | 422 |
+| Upstream timeout | `test_timeout_returns_504` | 504 |
+| Rate limit 429 | `test_rate_limit_returns_429` | 429 |
+| Upstream 500 | `test_upstream_500_returns_502` | 502 |
+| Broken model output | `test_broken_model_output_returns_502` | 502 |
+
+Extra (beyond the slide deck, still tested): upstream 503 → 503; unit tests for `LLMService` error mapping (retries, `InvalidModelOutputError`).
+
+Local run: `pytest -q tests/test_meeting_api.py` (expect all passed, no network).
+
+**Security:**
+
+- API key only in `.env` (gitignored); `.env.example` uses placeholders.
+- Error responses and logs do not print the key.
+- Week 2 has no project filter or cross-project checks (security cases come in later weeks).
 
 **Known failures / trade-offs:**
-- Soft semantic matching is required for summary/decision wording; owners and ISO dates are exact.
-- Structured `parse` may fall back to `json_object` if the provider rejects the schema (logged, still Pydantic-validated).
-- One thing that worked: treating “agreed that…” with no assignees as a decision (TC09).
-- One remaining risk: nondeterminism across OpenRouter runs; temperature is 0 but wording can still drift.
 
-**Demo link:** Not recorded yet. OpenAPI: `http://127.0.0.1:8000/docs`.
+- Summary and decisions use soft semantic matching; `owner` and `due_date` are exact against gold.
+- Some providers reject `parse` with a JSON schema → fallback to `json_object` then Pydantic validation (logged).
+- TC09-style: “agreed that …” with no assignee → decision only, no action — must be explicit in the prompt.
+- Nondeterminism: `temperature=0` helps but does not eliminate wording drift on re-runs of evaluate.
 
-**PR link:** Branch: `w2-meeting-notes-api`.
+**Demo link:** Not recorded yet. Local Swagger UI: `http://127.0.0.1:8000` (run uvicorn per README, then open the FastAPI interactive API page).
 
-**Next action:** Week 3 document ingest + pgvector retrieval.
+**PR link:** Branch `w2-meeting-notes-api` (add PR URL after push, using `evidence/weekly_pr_template.md`).
+
+**Next action:** W3 — ingest the 15 synthetic files under `data/documents/`, chunk, embed, pgvector, search API with `project_id` filter before top-k.

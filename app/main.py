@@ -6,7 +6,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from app.schemas import AnalyzeMeetingResponse, MeetingNotesRequest
 from app.services.llm import (
     InvalidModelOutputError, LLMService, UpstreamRateLimitError,
-    UpstreamServerError, UpstreamTimeoutError,
+    UpstreamServerError, UpstreamTimeoutError, UpstreamUnavailableError,
 )
 
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
@@ -35,7 +35,9 @@ def analyze_meeting(
     except UpstreamTimeoutError as exc:
         raise HTTPException(status_code=504, detail="upstream timeout") from exc
     except UpstreamRateLimitError as exc:
-        raise HTTPException(status_code=503, detail="upstream rate limited") from exc
+        raise HTTPException(status_code=429, detail="upstream rate limited") from exc
+    except UpstreamUnavailableError as exc:
+        raise HTTPException(status_code=503, detail="upstream model overloaded") from exc
     except UpstreamServerError as exc:
         raise HTTPException(status_code=502, detail="upstream server error") from exc
     except InvalidModelOutputError as exc:
