@@ -5,7 +5,7 @@
 
 **What I studied (2–3 concepts):**
 
-- [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs): `chat.completions.parse` + a Pydantic response model (replaces W1 JSON mode + repair).
+- [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses): `responses.parse` + `text_format` (Pydantic) + `output_parsed` (replaces W1 JSON mode + repair).
 - [Error codes / 429](https://developers.openai.com/api/docs/guides/error-codes): timeout → 504; rate limit → 429 with backoff; separate upstream failures from unparseable model output.
 - Extraction rules: nullable `owner` / `due_date`; ISO dates only when explicit in the notes; proposals / “maybe” must not become committed actions.
 
@@ -99,7 +99,7 @@ Local run: `pytest -q tests/test_meeting_api.py` (expect all passed, no network)
 **Known failures / trade-offs:**
 
 - Summary and decisions use soft semantic matching; `owner` and `due_date` are exact against gold.
-- Some providers reject `parse` with a JSON schema → fallback to `json_object` then Pydantic validation (logged).
+- Some providers reject `responses.parse` / JSON schema → fallback to `responses.create` with `text.format: json_object` then Pydantic validation (logged).
 - TC09-style: “agreed that …” with no assignee → decision only, no action — must be explicit in the prompt.
 - Nondeterminism: `temperature=0` helps but does not eliminate wording drift on re-runs of evaluate.
 

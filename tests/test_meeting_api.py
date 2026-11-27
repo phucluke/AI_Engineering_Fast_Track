@@ -119,8 +119,7 @@ def test_llm_maps_timeout_after_retries(monkeypatch):
     calls = {"n": 0}
     class FakeClient:
         def __init__(self):
-            self.chat = self
-            self.completions = self
+            self.responses = self
         def parse(self, **kwargs):
             calls["n"] += 1
             raise APITimeoutError(request=None)
@@ -135,8 +134,7 @@ def test_llm_maps_rate_limit_error(monkeypatch):
     monkeypatch.setattr("app.services.llm.time.sleep", lambda *_: None)
     class RateClient:
         def __init__(self):
-            self.chat = self
-            self.completions = self
+            self.responses = self
         def parse(self, **kwargs):
             raise _rate_limit_error()
     from app.services.llm import UpstreamRateLimitError
@@ -148,8 +146,7 @@ def test_llm_maps_429_api_status_fallback(monkeypatch):
     monkeypatch.setattr("app.services.llm.time.sleep", lambda *_: None)
     class RateClient:
         def __init__(self):
-            self.chat = self
-            self.completions = self
+            self.responses = self
         def parse(self, **kwargs):
             raise _status_error(429, "slow down")
     from app.services.llm import UpstreamRateLimitError
@@ -162,8 +159,7 @@ def test_llm_maps_internal_server_errors(monkeypatch):
     from app.services.llm import UpstreamServerError, UpstreamUnavailableError
     class OverloadedClient:
         def __init__(self):
-            self.chat = self
-            self.completions = self
+            self.responses = self
         def parse(self, **kwargs):
             raise _internal_server_error(503, "server_is_overloaded")
     svc503 = LLMService(client=OverloadedClient(), model="m", max_retries=0, system_prompt="x")
@@ -171,8 +167,7 @@ def test_llm_maps_internal_server_errors(monkeypatch):
         svc503.analyze_meeting("notes")
     class ServerClient:
         def __init__(self):
-            self.chat = self
-            self.completions = self
+            self.responses = self
         def parse(self, **kwargs):
             raise _internal_server_error(500, "boom")
     svc500 = LLMService(client=ServerClient(), model="m", max_retries=0, system_prompt="x")
@@ -182,25 +177,38 @@ def test_llm_maps_internal_server_errors(monkeypatch):
 def test_llm_invalid_parse_raises(monkeypatch):
     class BadClient:
         def __init__(self):
-            self.chat = self
-            self.completions = self
+            self.responses = self
         def parse(self, **kwargs):
-            class Msg:
+            bad = '{"summary":""}'
+            class Content:
+                type = "output_text"
+                text = bad
                 parsed = None
-                refusal = None
-                content = '{"summary":""}'
-            class Choice:
-                message = Msg()
+            class Output:
+                type = "message"
+                content = [Content()]
             class Resp:
-                choices = [Choice()]
+                output = [Output()]
+                @property
+                def output_parsed(self):
+                    return None
+                @property
+                def output_text(self):
+                    return bad
             return Resp()
         def create(self, **kwargs):
-            class Msg:
-                content = '{"summary":""}'
-            class Choice:
-                message = Msg()
+            bad = '{"summary":""}'
+            class Content:
+                type = "output_text"
+                text = bad
+            class Output:
+                type = "message"
+                content = [Content()]
             class Resp:
-                choices = [Choice()]
+                output = [Output()]
+                @property
+                def output_text(self):
+                    return bad
             return Resp()
     svc = LLMService(client=BadClient(), model="m", max_retries=0, system_prompt="x")
     with pytest.raises(InvalidModelOutputError):

@@ -41,6 +41,15 @@ def load_system_prompt(path: Path = PROMPT_PATH, version: str = "v1") -> str:
         raise ValueError(f"empty prompt {version}")
     return body
 
+def _response_refusal(response) -> str | None:
+    for output in response.output:
+        if output.type != "message":
+            continue
+        for content in output.content:
+            if content.type == "refusal":
+                return content.refusal
+    return None
+
 def _retry_after_seconds(exc: APIStatusError, attempt: int) -> float:
     headers = getattr(exc, "response", None)
     headers = getattr(headers, "headers", None) or {}
@@ -74,14 +83,14 @@ class LLMService:
         self.system_prompt = system_prompt if system_prompt is not None else load_system_prompt()
 
     def analyze_meeting(self, meeting_text: str) -> AnalyzeMeetingResponse:
-        messages = [
+        input_items = [
             {"role": "system", "content": self.system_prompt},
             {"role": "user", "content": meeting_text},
         ]
         last_exc: Exception | None = None
         for attempt in range(self.max_retries + 1):
             try:
-                return self._complete(messages)
+                return self._complete(input_items)
             except (APITimeoutError, TimeoutError) as exc:
                 last_exc = exc
                 log.warning("LLM timeout attempt=%s", attempt + 1)
@@ -126,42 +135,41 @@ class LLMService:
                 time.sleep(min(2 ** attempt, 8))
         raise UpstreamTimeoutError("upstream timeout") from last_exc
 
-    def _complete(self, messages: list[dict]) -> AnalyzeMeetingResponse:
+    def _complete(self, input_items: list[dict]) -> AnalyzeMeetingResponse:
         try:
-            response = self.client.chat.completions.parse(
+            response = self.client.responses.parse(
                 model=self.model,
                 temperature=0,
-                messages=messages,
-                response_format=AnalyzeMeetingResponse,
-                max_tokens=800,
+                input=input_items,
+                text_format=AnalyzeMeetingResponse,
+                max_output_tokens=800,
             )
-            parsed = response.choices[0].message.parsed
+            parsed = response.output_parsed
             if parsed is not None:
                 return parsed
-            refusal = response.choices[0].message.refusal
-            if refusal:
+            if _response_refusal(response):
                 raise InvalidModelOutputError("model refused the request")
-            content = response.choices[0].message.content
+            content = response.output_text
             if not content:
                 raise InvalidModelOutputError("empty model output")
             return AnalyzeMeetingResponse.model_validate_json(content)
         except APIStatusError as exc:
             if exc.status_code != 400:
                 raise
-            log.warning("structured parse unsupported; falling back to json_object")
-            return self._complete_json_object(messages)
+            log.warning("responses structured parse unsupported; falling back to json_object")
+            return self._complete_json_object(input_items)
         except ValidationError as exc:
             raise InvalidModelOutputError(str(exc)) from exc
 
-    def _complete_json_object(self, messages: list[dict]) -> AnalyzeMeetingResponse:
-        response = self.client.chat.completions.create(
+    def _complete_json_object(self, input_items: list[dict]) -> AnalyzeMeetingResponse:
+        response = self.client.responses.create(
             model=self.model,
             temperature=0,
-            messages=messages,
-            response_format={"type": "json_object"},
-            max_tokens=800,
+            input=input_items,
+            text={"format": {"type": "json_object"}},
+            max_output_tokens=800,
         )
-        content = response.choices[0].message.content
+        content = response.output_text
         if not content:
             raise InvalidModelOutputError("empty model output")
         try:

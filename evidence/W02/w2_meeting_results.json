@@ -64,22 +64,22 @@
       "prediction": {
         "summary": "The team discussed the deployment of version 2.5 to production and assigned tasks related to the deployment process.",
         "decisions": [
-          "Deploy version 2.5 to production on November 27, 2026."
+          "decided to deploy version 2.5 to production on November 27, 2026."
         ],
         "actions": [
           {
             "owner": "Lan",
-            "action": "Prepare the deployment checklist",
+            "action": "prepare the deployment checklist",
             "due_date": "2026-11-25"
           },
           {
             "owner": "Hung",
-            "action": "Execute the deployment",
+            "action": "execute the deployment",
             "due_date": "2026-11-27"
           },
           {
             "owner": "Phu",
-            "action": "Verify application health after deployment",
+            "action": "verify application health after deployment",
             "due_date": "2026-11-27"
           }
         ]
@@ -100,24 +100,24 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The team discussed improvements to query performance for the orders table and assigned tasks related to a database migration.",
+        "summary": "The team discussed improvements to the orders table to enhance query performance.",
         "decisions": [
-          "The team agreed to add an index to the orders table to improve query performance."
+          "agreed to add an index to the orders table to improve query performance."
         ],
         "actions": [
           {
             "owner": "Minh",
-            "action": "Create the database migration",
+            "action": "create the database migration",
             "due_date": "2026-11-27"
           },
           {
             "owner": "An",
-            "action": "Review the migration before deployment",
+            "action": "review the migration before deployment",
             "due_date": "2026-11-28"
           },
           {
             "owner": "Phu",
-            "action": "Benchmark the query performance",
+            "action": "benchmark the query performance",
             "due_date": "2026-11-30"
           }
         ]
@@ -138,24 +138,24 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The meeting focused on addressing vulnerable Ruby dependencies identified in the security scan. The team agreed to upgrade the affected gems before the next release.",
+        "summary": "The meeting focused on addressing vulnerable Ruby dependencies identified by a security scan. The team agreed to upgrade the affected gems before the next release.",
         "decisions": [
-          "Upgrade the affected gems before the next release."
+          "decided to upgrade the affected gems before the next release."
         ],
         "actions": [
           {
             "owner": "Phu",
-            "action": "Update the vulnerable dependencies",
+            "action": "update the vulnerable dependencies",
             "due_date": "2026-11-30"
           },
           {
             "owner": "Hung",
-            "action": "Run bundle-audit and verify the results",
+            "action": "run bundle-audit and verify the results",
             "due_date": "2026-12-01"
           },
           {
             "owner": "Lan",
-            "action": "Document the security changes",
+            "action": "document the security changes",
             "due_date": "2026-12-02"
           }
         ]
@@ -178,22 +178,22 @@
       "prediction": {
         "summary": "The team reviewed API latency and agreed to implement Redis caching for frequently accessed endpoints.",
         "decisions": [
-          "Implement Redis caching for frequently accessed endpoints."
+          "agreed to implement Redis caching for frequently accessed endpoints."
         ],
         "actions": [
           {
             "owner": "Minh",
-            "action": "Implement caching",
+            "action": "implement caching",
             "due_date": "2026-12-02"
           },
           {
             "owner": "An",
-            "action": "Add performance tests",
+            "action": "add performance tests",
             "due_date": "2026-12-03"
           },
           {
             "owner": "Hung",
-            "action": "Review the changes",
+            "action": "review the changes",
             "due_date": "2026-12-04"
           }
         ]
@@ -219,12 +219,12 @@
         "actions": [
           {
             "owner": "Hung",
-            "action": "Review the authentication pull request",
+            "action": "review the authentication pull request",
             "due_date": null
           },
           {
             "owner": "Phu",
-            "action": "Address any feedback from the review",
+            "action": "address any feedback from the review",
             "due_date": null
           }
         ]
@@ -247,7 +247,7 @@
       "prediction": {
         "summary": "The team discussed the need for improvements in the API documentation.",
         "decisions": [
-          "agreed to improve the API documentation"
+          "the team agreed that the API documentation needs improvement."
         ],
         "actions": [
           {
@@ -278,12 +278,12 @@
         "actions": [
           {
             "owner": "Hung",
-            "action": "Check the database connection pool settings",
+            "action": "check the database connection pool settings",
             "due_date": "2026-11-27"
           },
           {
             "owner": "An",
-            "action": "Investigate the high CPU usage",
+            "action": "investigate the high CPU usage",
             "due_date": null
           }
         ]
@@ -326,7 +326,7 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The meeting discussed the potential upgrade of the application to Rails 8.1, with concerns about backward compatibility raised.",
+        "summary": "The meeting discussed the potential upgrade of the application to Rails 8.1, but no final decision was made.",
         "decisions": [],
         "actions": []
       }
@@ -386,12 +386,12 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The team discussed the possibility of replacing some integration tests with unit tests to reduce execution time and considered creating a proof of concept.",
+        "summary": "The team discussed the possibility of replacing integration tests with unit tests to improve execution time and considered creating a proof of concept.",
         "decisions": [],
         "actions": [
           {
             "owner": "Lan",
-            "action": "Investigate the feasibility of replacing integration tests with unit tests.",
+            "action": "investigate the feasibility of replacing integration tests with unit tests",
             "due_date": "2026-11-30"
           }
         ]
@@ -412,30 +412,30 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The team reviewed the upcoming release, identified major risks, and made decisions regarding the release date and assigned tasks for validation and testing.",
+        "summary": "The team reviewed the upcoming release, identified major risks, and made decisions regarding the release timeline and testing responsibilities.",
         "decisions": [
-          "Postponed the release from December 3 to December 7, 2026.",
-          "Production deployment must not proceed until all critical tests pass."
+          "decided to postpone the release from December 3 to December 7, 2026",
+          "agreed that production deployment must not proceed until all critical tests pass."
         ],
         "actions": [
           {
             "owner": "Phu",
-            "action": "Validate the database migrations",
+            "action": "validate the database migrations",
             "due_date": "2026-12-02"
           },
           {
             "owner": "Hung",
-            "action": "Perform API compatibility testing",
+            "action": "perform API compatibility testing",
             "due_date": "2026-12-03"
           },
           {
             "owner": "Minh",
-            "action": "Prepare a rollback plan",
+            "action": "prepare a rollback plan",
             "due_date": "2026-12-04"
           },
           {
             "owner": "Lan",
-            "action": "Update the release documentation",
+            "action": "update the release documentation",
             "due_date": "2026-12-05"
           }
         ]
@@ -456,34 +456,35 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The team discussed improvements to the authentication module and assigned specific tasks to team members with deadlines.",
+        "summary": "The team discussed improvements to the authentication module and assigned tasks related to its implementation and validation.",
         "decisions": [
-          "The team decided to require additional security validation before releasing authentication changes."
+          "the team agreed to improve the authentication module",
+          "the team decided to require additional security validation before releasing authentication changes."
         ],
         "actions": [
           {
             "owner": "Phu",
-            "action": "Implement token refresh handling",
+            "action": "implement token refresh handling",
             "due_date": "2026-12-04"
           },
           {
             "owner": "Hung",
-            "action": "Implement token refresh handling",
+            "action": "implement token refresh handling",
             "due_date": "2026-12-04"
           },
           {
             "owner": "Minh",
-            "action": "Create automated authentication tests",
+            "action": "create automated authentication tests",
             "due_date": "2026-12-05"
           },
           {
             "owner": "An",
-            "action": "Review security risks",
+            "action": "review security risks",
             "due_date": "2026-12-06"
           },
           {
             "owner": "Phu",
-            "action": "Update the technical documentation",
+            "action": "update the technical documentation",
             "due_date": "2026-12-07"
           }
         ]
@@ -506,22 +507,23 @@
       "prediction": {
         "summary": "The team discussed the payment integration deadline and the need for additional testing, resulting in a revised schedule.",
         "decisions": [
-          "The deadline for payment integration was moved to December 9, 2026."
+          "agreed to move the deadline to December 9, 2026",
+          "decided that the old December 4 deadline is no longer valid"
         ],
         "actions": [
           {
             "owner": "Phu",
-            "action": "Finish the payment integration.",
+            "action": "finish the integration",
             "due_date": "2026-12-07"
           },
           {
             "owner": "Hung",
-            "action": "Complete integration testing.",
+            "action": "complete integration testing",
             "due_date": "2026-12-09"
           },
           {
             "owner": "Lan",
-            "action": "Notify the stakeholders about the revised schedule.",
+            "action": "notify the stakeholders about the revised schedule",
             "due_date": "2026-12-03"
           }
         ]
@@ -542,30 +544,31 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The team reviewed a production outage caused by an exhausted database connection pool and made decisions on how to address the issue.",
+        "summary": "The team reviewed a production outage caused by an exhausted database connection pool and discussed actions to prevent future incidents.",
         "decisions": [
-          "The team agreed to increase the connection pool limit and add monitoring alerts.",
-          "The team decided not to proceed with moving the database to a larger server for now."
+          "agreed to increase the connection pool limit",
+          "agreed to add monitoring alerts",
+          "decided not to proceed with moving the database to a larger server"
         ],
         "actions": [
           {
             "owner": "Phu",
-            "action": "Update the database configuration",
+            "action": "update the database configuration",
             "due_date": "2026-12-04"
           },
           {
             "owner": "Hung",
-            "action": "Implement connection pool monitoring",
+            "action": "implement connection pool monitoring",
             "due_date": "2026-12-05"
           },
           {
             "owner": "Minh",
-            "action": "Add load tests",
+            "action": "add load tests",
             "due_date": "2026-12-07"
           },
           {
             "owner": "Lan",
-            "action": "Prepare the incident report",
+            "action": "prepare the incident report",
             "due_date": "2026-12-08"
           }
         ]
@@ -586,7 +589,7 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The team reviewed the current sprint progress and confirmed that all previously assigned tasks were completed successfully. This was an informational meeting with no new decisions or action items.",
+        "summary": "The team reviewed the current sprint progress and confirmed that all previously assigned tasks were completed successfully.",
         "decisions": [],
         "actions": []
       }
@@ -606,7 +609,7 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The sprint planning meeting was cancelled due to unavailability of most team members, resulting in no project discussion.",
+        "summary": "The sprint planning meeting was cancelled due to unavailability of most team members.",
         "decisions": [],
         "actions": []
       }
@@ -626,7 +629,7 @@
       },
       "case_ok": true,
       "prediction": {
-        "summary": "The meeting discussed the performance of the API and potential issues related to the database.",
+        "summary": "The meeting discussed the performance of the API and potential causes for its slowness.",
         "decisions": [],
         "actions": []
       }
